@@ -8,7 +8,7 @@ const server = http.createServer((req, res) => {
   
   if (req.url === "/create") {
 	createPage(req, res);
-  }	else if (req.url === "/save") {
+  }	else if (req.url.startsWith("/save")) {
 	saveAction(req, res);
   } else {   
 	res.statusCode = 200;
@@ -32,7 +32,17 @@ function createPage(req, res) {
 
 function saveAction(req, res) {
 	console.log("Saving content"); //to do: parse url, write to console
-}	
+	const data = "sziapeti";
+	var queryData = url.parse(req.url, true).query;
+	console.log("querydata: " + JSON.stringify(queryData));
+	fs.writeFile('posts/' + queryData.title + '.txt', queryData.content, (err) => {
+		if (err) throw err;
+		console.log('The file has been saved!');
+	});
+}
+
+
+	
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
