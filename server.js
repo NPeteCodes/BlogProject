@@ -3,6 +3,8 @@ const fs = require('fs');
 const url = require('url');
 const hostname = '127.0.0.1';
 const port = 80;
+const title = "foo";
+const content = "bar";
 
 const server = http.createServer((req, res) => {
   
@@ -37,7 +39,10 @@ function homePage(req, res) {
 	fs.readFile('index.html', function(err, data){
 		res.statusCode = 200;
 		res.setHeader('Content-Type', 'text/html');
-		res.write(data);
+		var data0 = data.toString();
+		data0 = data0.replace("{{title}}", title);
+		data0 = data0.replace("{{content}}", content);
+		res.write(data0);
 		console.log("The file has been read");
 		res.end();
 	});
