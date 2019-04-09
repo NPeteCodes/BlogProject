@@ -10,6 +10,8 @@ const server = http.createServer((req, res) => {
 	createPage(req, res);
   }	else if (req.url.startsWith("/save")) {
 	saveAction(req, res);
+  } else if (req.url === "/") {
+	homePage(req, res);
   } else {   
 	res.statusCode = 200;
 	res.setHeader('Content-Type', 'text/plain');
@@ -22,6 +24,17 @@ const server = http.createServer((req, res) => {
 function createPage(req, res) {
 	console.log("Create page requested");
 	fs.readFile('create.html', function(err, data){
+		res.statusCode = 200;
+		res.setHeader('Content-Type', 'text/html');
+		res.write(data);
+		console.log("The file has been read");
+		res.end();
+	});
+}
+
+function homePage(req, res) {
+	console.log("Homepage");
+	fs.readFile('index.html', function(err, data){
 		res.statusCode = 200;
 		res.setHeader('Content-Type', 'text/html');
 		res.write(data);
