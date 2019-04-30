@@ -5,6 +5,12 @@ const hostname = '127.0.0.1';
 const port = 80;
 const title = "foo";
 const content = "bar";
+class Post {
+	constructor(titleName) {
+		this.title = titleName;
+		this.content = fs.readFileSync('posts/' + titleName + '.txt', 'utf8')
+	}
+}
 
 const server = http.createServer((req, res) => {
   
@@ -40,12 +46,17 @@ function homePage(req, res) {
 		res.statusCode = 200;
 		res.setHeader('Content-Type', 'text/html');
 		var data0 = data.toString();
-		data0 = data0.replace("{{title}}", title);
-		data0 = data0.replace("{{content}}", content);
+		
+		const myPost =  new Post('Alma');
+		
+		data0 = data0.replace("{{title}}", myPost.title);
+		data0 = data0.replace("{{content}}", myPost.content);
 		res.write(data0);
 		console.log("The file has been read");
 		res.end();
 	});
+	
+	
 }
 
 function saveAction(req, res) {
@@ -53,7 +64,7 @@ function saveAction(req, res) {
 	const data = "sziapeti";
 	var queryData = url.parse(req.url, true).query;
 	console.log("querydata: " + JSON.stringify(queryData));
-	fs.writeFile('posts/' + queryData.title + '.txt', queryData.content, (err) => {
+	fs.writeFile('posts/' + queryData.title + '.txt', queryData.content, 'utf8', (err) => {
 		if (err) throw err;
 		console.log('The file has been saved!');
 	});
